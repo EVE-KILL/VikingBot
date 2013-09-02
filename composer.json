@@ -1,0 +1,10 @@
+{
+    "config": {
+        "vendor-dir": "lib/"
+    },
+    "require": {
+        "3rdpartyeve/phealng": "*",
+        "dg/twitter-php": "*"
+    },
+    "minimum-stability": "stable"
+}
