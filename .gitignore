@@ -1,3 +1,4 @@
 config.php
 sftp-config.json
 logs/vikingbot.log
+composer.phar
