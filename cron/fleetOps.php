@@ -1,9 +1,10 @@
 <?php
 chdir("/opt/VikingBot/cron/");
 date_default_timezone_set("UTC");
-require( "../config.php" );
-require( "../lib/functions.php" );
-require("../lib/pluginInterface.php");
+require_once( "../config.php" );
+require_once( "../lib/functions.php" );
+require_once("../lib/pluginInterface.php");
+require_once("../lib/autoloader.php");
 
 $latest = getPermCache("fleetOps");
 if($latest == null) $latest = 0;
