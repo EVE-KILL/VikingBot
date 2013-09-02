@@ -1,8 +1,9 @@
 <?php
 
-require("config.php");
-require("lib/functions.php");
-require("lib/pluginInterface.php");
+require_once("config.php");
+require_once("lib/functions.php");
+require_once("lib/pluginInterface.php");
+require_once("lib/autoload.php");
 
 set_time_limit(0);
 error_reporting(E_ALL);
