@@ -10,7 +10,7 @@ $config = array(
 	'waitTime'		=>	10,
 	'adminPass'		=>	'mysuperadminpassword', // admin password for the bot
 	'memoryLimit'	=>	'128',
-    'memoryRestart' =>	'10',
+	'memoryRestart' =>	'10',
 	'trigger'		=>	'.',
 	'maxPerTenMin'	=>	5000
 );
