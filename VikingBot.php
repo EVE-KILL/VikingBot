@@ -6,7 +6,7 @@ require("lib/pluginInterface.php");
 
 set_time_limit(0);
 error_reporting(E_ALL);
-date_default_timezone_set('GMT');
+date_default_timezone_set('UTC');
 declare(ticks = 1);
 
 if(!is_file("config.php")) {
@@ -75,9 +75,15 @@ class VikingBot {
 
 			//Join channels if not already joined
 			if( !$this->inChannel && (time() - $this->config['waitTime']) > $this->startTime ) {
-        	                $this->joinChannel($this->config['channel']);
-                	        sleep(2);
-                		$this->inChannel = true;
+				global $config;
+				$oper = $config["oper"];
+				$nickserv = $config["nickserv"];
+				sendData($this->socket, "OPER {$oper["operUsername"]} {$oper["operPassword"]}");
+				sendData($this->socket, "ns ghost {$nickserv["username"]} {$nickserv["password"]}");
+				sendData($this->socket, "ns identify {$nickserv["username"]} {$nickserv["password"]}");
+				$this->joinChannel($this->config['channel']);
+				sleep(2);
+				$this->inChannel = true;
 			}
 	
 			//Run scheduled memory check
@@ -122,9 +128,11 @@ class VikingBot {
 							case ":{$this->config['trigger']}exit":
 								$this->shutdown($bits[4], $from, $chan);
 							break;
-		
 							case ":{$this->config['trigger']}restart":
 								$this->restart($bits[4], $from, $chan);
+							break;
+							case ":{$this->config['trigger']}help":
+								$this->help($bits[4], $from, $chan);
 							break;
 						}
 						$cmd = null;
@@ -184,9 +192,9 @@ class VikingBot {
 
 	function restart($pass, $from, $chan) {
 		if(!$this->correctAdminPass($pass)) {
-                        sendMessage($this->socket, $chan, "{$from}: Wrong password");
-                        return false;
-                }
+				sendMessage($this->socket, $chan, "{$from}: Wrong password");
+				return false;
+			}
 		sendMessage($this->socket, $chan, "{$from}: Restarting...");
 		$this->prepareShutdown("");
 		doRestart();
@@ -194,12 +202,13 @@ class VikingBot {
 	
 	function prepareShutdown($msg) {
 		if(strlen($msg) == 0) {
-			$msg = "VikingBot - https://github.com/Ueland/VikingBot";
+			$msg = "I am the Vanguard of your destruction. This exchange is over...";
 		}
-                sendData($this->socket, "QUIT :{$msg}");
-                foreach($this->plugins as $plugin) {
-                        $plugin->destroy();
-                }
+
+		sendData($this->socket, "QUIT :{$msg}");
+		foreach($this->plugins as $plugin) {
+			$plugin->destroy();
+		}
 	}
 
 	function shutdown($pass, $from, $chan) {
@@ -227,7 +236,7 @@ class VikingBot {
 	}
 
 	function signalHandler($signal) {
-		sendData($this->socket, "QUIT :Caught signal {$signal}, shutting down");
+		sendData($this->socket, "QUIT :I am the Vanguard of your destruction. This exchange is over...");
 		logMsg("Caught {$signal}, shutting down\n");
 		exit();
 	}
@@ -249,6 +258,46 @@ class VikingBot {
 		}
 		$this->floodDb = array($interval=>$floodData);
 		return true;
+	}
+
+	function help($command, $from, $channel)
+	{
+		foreach($this->plugins as $key => $plugin)
+		{
+			$data[] = $plugin->getDescription();
+			foreach($data as $p)
+				$plugins[strtolower($p["command"])] = $p;
+		}
+
+		if(!$command)
+		{
+			$commands = array();
+			foreach($plugins as $plugin)
+			{
+				if(isset($plugin["command"]) && ($plugin["command"] != "" || $plugin["command"] != NULL))
+					$commands[] = $plugin["command"];
+			}
+			$availCommands = implode(", ", $commands);
+			sendMessage($this->socket, $channel, "Commands available (|g|For more info, use .help <command>|n|): {$availCommands}");
+		}
+		else
+		{
+			$data = $plugins[strtolower(trim($command))];
+			$channelsAllowed = $data["channels"];
+
+			if(!isset($data["command"]) || !isset($data["description"]))
+				sendMessage($this->socket, $channel, "|r|Error!|n| There is no help or command for this function");
+			else
+			{
+				if(!in_array("all", $channelsAllowed))
+				{
+					$help = "|g|.{$data["command"]}|n|: (|r|Limited channels|n|) / {$data["description"]}";
+				}
+				else
+					$help = "|g|.{$data["command"]}|n|: {$data["description"]}";
+				sendMessage($this->socket, $channel, $help);
+			}
+		}
 	}
 }
 

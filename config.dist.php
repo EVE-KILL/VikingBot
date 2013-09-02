@@ -1,32 +1,57 @@
 <?php
 
 $config = array(
-	'server'	=>	'servername',		//Server name, prefix it with "ssl://" in order to use SSL server
-	'port'		=>	6666,			//Server port
-	'channel'	=>	'#vikingbot',		//Channel to join, use array('channel1', 'channel2') for multiple channels
-	'name'		=>	'vikingbot',		//Name of the bot
-	'nick'		=>	'vikingbot',		//Nick of the bot
-	'pass'		=>	'',			//Server password
-	'waitTime'	=>	10,			//How many seconds to wait before joining channel after connecting to server
-	'adminPass'	=>	'vikingbot',		//Bot admin password, used for commands like !exit (!exit vikingbot)
-	'memoryLimit'	=>	'128',			//Max memory the bot can use, in MB
-        'memoryRestart' =>      '10',                   //Min memory usage, in MB. (The bot will try to clear RAM or restart if reached)
-	'trigger'	=>	'!',			//What character should be used as bot command prefixes
-	'maxPerTenMin'	=>	50			//Max messgages a user can send per 10 minutes before beeing ignored for that time
+	'server'		=>	'ssl://', // ssl://ip for ssl tcp://ip for regular
+	'port'			=>	0000,
+	'channel'		=>	array("#chan1", "#chan2"), // array of channels
+	'name'			=>	'botbot',
+	'nick'			=>	'botbot',
+	'pass'			=>	'', // password if the irc server needs it
+	'waitTime'		=>	10,
+	'adminPass'		=>	'mysuperadminpassword', // admin password for the bot
+	'memoryLimit'	=>	'128',
+    'memoryRestart' =>	'10',
+	'trigger'		=>	'.',
+	'maxPerTenMin'	=>	5000
 );
 
-//=====================================
-//Plugin specific configuration
-//=====================================
-
-//RSS Reader
-$config['plugins']['rssReader'] = array(
-        array('title'=> 'VG',           'url'=>'http://www.vg.no/rss/nyfront.php?frontId=1',    'pollInterval'=>15,     'channel'=>'#vikingbot'),
-        array('title'=> 'BBC News',     'url'=>'http://feeds.bbci.co.uk/news/rss.xml',          'pollInterval'=>15,     'channel'=>'#vikingbot'),
-        array('title'=> 'CNN',          'url'=>'http://rss.cnn.com/rss/edition.rss',            'pollInterval'=>15,     'channel'=>'#vikingbot'),
+// mySQL
+$config["mysql"] = array(
+	"host" => "",
+	"username" => "",
+	"password" => "",
+	"database" => "",
 );
 
-//File reader
-$config['plugins']['fileReader'] = array(
-        'channel'       => '#vikingbot',
-);
+// Oper
+// The bot will auto identify with oper
+$config["oper"] = array(
+	"operUsername" => "",
+	"operPassword" => ""
+	);
+
+// WolframAlpha
+require_once("lib/wolframalpha/WolframAlphaEngine.php");
+$config["wolframalpha"] = array(
+	"appID" => ""
+	);
+
+// FileReader
+$config["fileReader"] = array(
+	"twitter" => "",
+	"fleetops" => ""
+	);
+
+// Twitter
+$config["twitter"] = array(
+	"consumerKey" => "",
+	"consumerSecret" => "",
+	"accessToken" => "",
+	"accessTokenSecret" => ""
+	);
+
+// Nickserv
+$config["nickserv"] = array(
+	"username" => "",
+	"password" => ""
+	);

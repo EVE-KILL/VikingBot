@@ -1,13 +1,13 @@
 <?php
 
-class changetoclassname implements pluginInterface
+class botGhost implements pluginInterface
 {
     var $socket;
     var $config;
 
     function getDescription()
     {
-        $pluginName = "skeleton";
+        $pluginName = "botGhost";
         $channels = array();
         $command = "";
         $description = "";
@@ -29,5 +29,12 @@ class changetoclassname implements pluginInterface
     }
 
     function onData($data) {
+        if(stristr($data, ".net 433"))
+        {
+            sendData($this->socket, "NICK Sovereign_");
+            sendData($this->socket, "ns ghost {$nickserv["username"]} {$nickserv["password"]}");
+            sendData($this->socket, "NICK Sovereign");
+            sendData($this->socket, "ns identify {$nickserv["username"]} {$nickserv["password"]}");
+        }
     }
 }
