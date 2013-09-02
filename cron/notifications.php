@@ -4,7 +4,7 @@ date_default_timezone_set("UTC");
 require_once( "../config.php" );
 require_once( "../lib/functions.php" );
 require_once("../lib/pluginInterface.php");
-require_once("../vendor/autoloader.php");
+require_once("../vendor/autoload.php");
 
 // autoload the pheal stuff
 spl_autoload_register("Pheal::classload");
