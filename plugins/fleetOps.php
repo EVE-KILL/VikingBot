@@ -55,11 +55,10 @@ class fleetOps implements pluginInterface
                     foreach($dateSort as $op)
                     {
                         $subject = trim($op["subject"]);
-                        $by = trim($op["poster_name"]);
                         $linkID = $op["id_topic"];
                         $url = "https://forum.insidiousempire.net/index.php?topic={$linkID}.0";
 
-                        $message = "Op: |g|{$subject}|n| / By: |g|{$by}|n| / URL: |g|{$url}|n|";
+                        $message = "Op: |g|{$subject}|n| / URL: |g|{$url}|n|";
                         sendMessage($this->socket, $channel, $message);
                     }
                 }
