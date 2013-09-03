@@ -99,7 +99,7 @@ class VikingBot {
 			}
 
 			//Load data from IRC server
-			$data = fgets($this->socket, 256);
+			$data = fgets($this->socket, 2048);
 			if(strlen($data) > 0) {
 				logMsg("<Server to bot> ".$data);
 				$bits = explode(' ', $data);
