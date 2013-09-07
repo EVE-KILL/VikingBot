@@ -8,7 +8,7 @@ class pingChannels implements pluginInterface
     function getDescription()
     {
         $pluginName = "pingChannels";
-        $channels = array("#fleetcommanders", "leadership", "capitalcommanders");
+        $channels = array("#fleetcommanders", "#leadership", "#capitalcommanders", "#thewarroom");
         $command = "ping";
         $description = "Pings all users in a channel. Example: |g|.ping #asdf IM ON FIRE|n|";
         return array("pluginName" => $pluginName, "channels" => $channels, "command" => $command, "description" => $description);
@@ -26,7 +26,7 @@ class pingChannels implements pluginInterface
         // initiate a who
         if(stringStartsWith($msg, "{$this->config['trigger']}ping"))
         {
-            if(in_array($channel, array("#fleetcommanders", "#leadership", "#capitalcommanders")))
+            if(in_array($channel, array("#fleetcommanders", "#leadership", "#capitalcommanders", "#thewarroom")))
             {
                 $data = explode(" ", $msg);
                 $pingChan = $data[1];
@@ -35,7 +35,7 @@ class pingChannels implements pluginInterface
                 $message = implode(" ", $data);
 
                 $date = date("Y-m-d H:i:s");
-                $message = $message . " [Sent by {$from} ({$channel}) at {$date}]";
+                $message = $message . " [Sent by {$from} ({$channel} to {$pingChan}) at {$date}]";
 
                 setTemp("SENDPINGTOCHANNEL", $pingChan);
                 setTemp("ORIGINCHANNEL", $channel);
